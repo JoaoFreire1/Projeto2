@@ -50,7 +50,45 @@ namespace CraftingSim.Model
                     continue;
 
                 Dictionary<IMaterial, int> requiredMaterials = new Dictionary<IMaterial, int>();
+
+                // Linhas seguintes: <id>,<quantidade>
+                for (int i = 1; i < lines.Length; i++)
+                {
+                    if (string.IsNullOrWhiteSpace(lines[i]))
+                        continue;
+
+                    string[] parts = lines[i].Split(',');
+                    if (parts.Length != 2)
+                        continue;
+
+                    if (!int.TryParse(parts[0], out int materialId))
+                        continue;
+
+                    if (!int.TryParse(parts[1], out int quantity))
+                        continue;
+
+                    IMaterial material = inventory.GetMaterial(materialId);
+                    if (material == null)
+                    {
+                        // Se o material não estiver no inventário, criar um temporário com nome vazio (ou opcional)
+                        // Para isso precisamos de acesso ao nome do material, que não temos aqui.
+                        // Melhor ignorar essa receita? Ou criar um material apenas com Id?
+
+                        // Vamos criar um material temporário só com Id e um nome placeholder:
+                        material = new Material(materialId, $"Material{materialId}");
+                    }
+
+                    if (requiredMaterials.ContainsKey(material))
+                        requiredMaterials[material] += quantity;
+                    else
+                        requiredMaterials[material] = quantity;
+                }
+
             }
+
+            // Criar a receita e adicionar na lista
+            IRecipe recipe = new Recipe(itemName, successRate, requiredMaterials);
+            recipeList.Add(recipe);
         }
 
         /// <summary>

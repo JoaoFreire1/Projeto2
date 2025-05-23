@@ -38,7 +38,32 @@ namespace CraftingSim.Model
         /// <param name="quantity">The new amount to set</param>
         public void AddMaterial(IMaterial material, int quantity)
         {
-            //TODO Implement Me
+            if (material == null || quantity <= 0)
+                return;
+
+            // Verifica se já existe um material equivalente (ou por ID ou pelo nome)
+            IMaterial existing = GetMaterial(material.Id);
+            if (existing == null)
+            {
+                // Nenhum material com mesmo Id - procurar por nome
+                foreach (var m in materials.Keys)
+                {
+                    if (m.Equals(material))
+                    {
+                        existing = m;
+                        break;
+                    }
+                }
+            }
+
+            if (existing != null)
+            {
+                materials[existing] += quantity;
+            }
+            else
+            {
+                materials[material] = quantity;
+            }
         }
 
         /// <summary>
