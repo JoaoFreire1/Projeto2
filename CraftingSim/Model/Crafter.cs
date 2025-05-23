@@ -84,11 +84,13 @@ namespace CraftingSim.Model
                         requiredMaterials[material] = quantity;
                 }
 
+                // Criar a receita e adicionar na lista
+                IRecipe recipe = new Recipe(itemName, successRate, requiredMaterials);
+                recipeList.Add(recipe);
             }
 
-            // Criar a receita e adicionar na lista
-            IRecipe recipe = new Recipe(itemName, successRate, requiredMaterials);
-            recipeList.Add(recipe);
+            // Ordenar recipeList pelo nome (case insensitive)
+            recipeList.Sort((r1, r2) => string.Compare(r1.Name, r2.Name, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
