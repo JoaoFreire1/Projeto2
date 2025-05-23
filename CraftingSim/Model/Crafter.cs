@@ -34,21 +34,22 @@ namespace CraftingSim.Model
             foreach (string file in recipeFiles)
             {
                 if (!File.Exists(file))
-                continue;
+                    continue;
 
                 string[] lines = File.ReadAllLines(file);
                 if (lines.Length < 2)
-                continue;
+                    continue;
 
                 // Primeira linha: <nome>,<probabilidade>
                 string[] headerParts = lines[0].Split(',');
                 if (headerParts.Length != 2)
-                continue;
+                    continue;
 
                 string itemName = headerParts[0].Trim();
                 if (!double.TryParse(headerParts[1], out double successRate))
-                continue;
+                    continue;
 
+                Dictionary<IMaterial, int> requiredMaterials = new Dictionary<IMaterial, int>();
             }
         }
 
