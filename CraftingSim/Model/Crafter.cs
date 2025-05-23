@@ -31,7 +31,25 @@ namespace CraftingSim.Model
         /// <param name="recipeFiles">Array of file paths</param>
         public void LoadRecipesFromFile(string[] recipeFiles)
         {
-            //TODO Implement Me
+            foreach (string file in recipeFiles)
+            {
+                if (!File.Exists(file))
+                continue;
+
+                string[] lines = File.ReadAllLines(file);
+                if (lines.Length < 2)
+                continue;
+
+                // Primeira linha: <nome>,<probabilidade>
+                string[] headerParts = lines[0].Split(',');
+                if (headerParts.Length != 2)
+                continue;
+
+                string itemName = headerParts[0].Trim();
+                if (!double.TryParse(headerParts[1], out double successRate))
+                continue;
+
+            }
         }
 
         /// <summary>
